@@ -3,13 +3,18 @@ from input.input_manager import InputManager
 from player.player import Player
 from frame_counter import FrameCounter
 import game_objects
+from enemy.enemy import Enemy
+from maze.bricks import Brick
+from victory.main_door import FinishLine
+
 BG = (255, 255, 0)
+WHITE = (255, 255, 255)
 
 # 1. Init pygame
 pygame.init()
 
 # 2. Set screen
-SIZE = (600, 800)
+SIZE = (800, 640)
 canvas = pygame.display.set_mode(SIZE)
 
 # 3. Clock
@@ -19,10 +24,15 @@ loop = True
 
 input_manager = InputManager()
 
-player = Player(400, 580, input_manager)
+player = Player(16, 16, input_manager)
+enemy = Enemy(784, 624, input_manager)
+finish_line = FinishLine(400, 320)
+bricks = Brick()
+
 
 game_objects.add(player)
-
+game_objects.add(enemy)
+game_objects.add(finish_line)
 
 while loop:
     # 1. Event processing
@@ -36,9 +46,10 @@ while loop:
     game_objects.update()
 
     # 2. Draw
-    canvas.fill(BG)
+    canvas.fill(WHITE)
 
     game_objects.render(canvas)
+    bricks.render(canvas)
 
     pygame.display.set_caption('Micro game')
 

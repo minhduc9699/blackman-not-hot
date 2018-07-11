@@ -29,6 +29,7 @@ def recycle(t, x, y):
     add(new_game_object)
     return new_game_object
 
+
 def collide_with(box_collider, wanted_type): #wanted_type để tối ưu hóa
     collide_list = []
     for game_object in game_objects:
@@ -37,6 +38,7 @@ def collide_with(box_collider, wanted_type): #wanted_type để tối ưu hóa
                 if game_object.box_collider.overlap(box_collider):
                     collide_list.append(game_object)
     return collide_list
+
 
 class GameObject:
     def __init__(self, x, y):
