@@ -7,12 +7,13 @@ from game_objects import collide_with, add as add_game_object
 # from victory.player_escaped import PlayerEscaped
 from player.player_animator import PlayerAnimator
 # from black_slave.prison_break import PrisonBreak
+from input.input_manager import global_input_manager
+
 
 
 class Player(GameObject):
-    def __init__(self, x, y, input_manager):
+    def __init__(self, x, y):
         GameObject.__init__(self, x, y)
-        self.input_manager = input_manager
         self.box_collider = BoxCollider(32, 32)
         self.renderer = PlayerAnimator()
         self.frame_counter = FrameCounter(120)
@@ -68,15 +69,15 @@ class Player(GameObject):
         self.dy = 0
         # self.check_collision()
         if self.x == 768:
-            self.input_manager.right_pressed = False
+            global_input_manager.right_pressed = False
         if self.x == 32:
-            self.input_manager.left_pressed = False
+            global_input_manager.left_pressed = False
         if self.y == 608:
-            self.input_manager.down_pressed = False
+            global_input_manager.down_pressed = False
         if self.y == 32:
-            self.input_manager.up_pressed = False
+            global_input_manager.up_pressed = False
 
-        if self.input_manager.right_pressed:
+        if global_input_manager.right_pressed:
             self.box_collider.x = self.x + self.step
             self.check_overlap()
             if self.overlap:
@@ -84,7 +85,7 @@ class Player(GameObject):
             else:
                 self.dx += self.step
 
-        elif self.input_manager.left_pressed:
+        elif global_input_manager.left_pressed:
             self.box_collider.x = self.x - self.step
             self.check_overlap()
             if self.overlap:
@@ -92,7 +93,7 @@ class Player(GameObject):
             else:
                 self.dx -= self.step
 
-        elif self.input_manager.down_pressed:
+        elif global_input_manager.down_pressed:
             self.box_collider.y = self.y + self.step
             self.check_overlap()
             if self.overlap:
@@ -100,7 +101,7 @@ class Player(GameObject):
             else:
                 self.dy += self.step
 
-        elif self.input_manager.up_pressed:
+        elif global_input_manager.up_pressed:
             self.box_collider.y = self.y - self.step
             self.check_overlap()
             if self.overlap:

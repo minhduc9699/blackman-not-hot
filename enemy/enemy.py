@@ -9,6 +9,8 @@ from renderer.animation import Animation
 from enemy.enemy_animator import EnemyAnimator
 from renderer.image_renderer import ImageRenderer
 from random import choice
+from scenes.scene_manager import global_scene_manager
+from scenes.gameover_scene import GameOverScene
 
 
 class Enemy(GameObject):
@@ -45,6 +47,8 @@ class Enemy(GameObject):
         collide_list = collide_with(self.box_collider, Player)
         for game_object in collide_list:
             game_object.deactivate()
+            game_over = GameOverScene()
+            global_scene_manager.change_scene(game_over)
 
     def move(self):
         if self.x > 768:

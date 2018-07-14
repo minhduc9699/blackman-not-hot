@@ -4,6 +4,8 @@ game_objects = []
 def add(game_object):
     game_objects.append(game_object)
 
+def clear():
+    game_objects.clear()
 
 def update():
     for game_object in game_objects:
