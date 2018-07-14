@@ -8,6 +8,7 @@ from enemy.enemy import Enemy
 from black_screen import BlackScreen
 from black_slave.black_slave import BlackSlave
 from victory.main_door import MainDoor
+from maps.map_gen import *
 
 BG = (255, 255, 0)
 WHITE = (255, 255, 255)
@@ -26,9 +27,11 @@ loop = True
 
 input_manager = InputManager()
 
-player = Player(64, 320, input_manager)
-enemy = Enemy(400, 608)
-enemy1 = Enemy(640, 400)
+generate_map("image/map/map.json")
+
+player = Player(32, 320, input_manager)
+enemy = Enemy(368, 608)
+enemy1 = Enemy(640, 300)
 
 black_slave = BlackSlave(768, 240)
 black_screen = BlackScreen(0, 0)

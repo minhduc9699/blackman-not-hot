@@ -1,6 +1,7 @@
 import pygame
-from game_objects import GameObject
+from game_objects import GameObject, game_objects
 from frame_counter import FrameCounter
+from map_title.wall import Wall
 from physics.box_collider import BoxCollider
 from game_objects import collide_with, add as add_game_object
 # from victory.player_escaped import PlayerEscaped
@@ -12,7 +13,7 @@ class Player(GameObject):
     def __init__(self, x, y, input_manager):
         GameObject.__init__(self, x, y)
         self.input_manager = input_manager
-        self.box_collider = BoxCollider(64, 64)
+        self.box_collider = BoxCollider(32, 32)
         self.renderer = PlayerAnimator()
         self.frame_counter = FrameCounter(120)
         self.counter = FrameCounter(120)
@@ -20,6 +21,15 @@ class Player(GameObject):
         self.dx = 0
         self.dy = 0
         self.win = False
+        self.step = 8
+        self.overlap = False
+
+    def check_overlap(self):
+        for game_object in game_objects:
+            if type(game_object) == Wall:
+                overlap = BoxCollider.overlap(self.box_collider, game_object.box_collider)
+                if overlap:
+                    self.overlap = True
 
     def update(self):
         GameObject.update(self)
@@ -56,29 +66,74 @@ class Player(GameObject):
     def move(self):
         self.dx = 0
         self.dy = 0
+        # self.check_collision()
         if self.x == 768:
             self.input_manager.right_pressed = False
         if self.x == 32:
             self.input_manager.left_pressed = False
-        if self.y == 602:
+        if self.y == 608:
             self.input_manager.down_pressed = False
         if self.y == 32:
             self.input_manager.up_pressed = False
 
         if self.input_manager.right_pressed:
-            self.dx += 8
+            self.box_collider.x = self.x + self.step
+            self.check_overlap()
+            if self.overlap:
+                self.dx += 0
+            else:
+                self.dx += self.step
 
         elif self.input_manager.left_pressed:
-            self.dx -= 8
+            self.box_collider.x = self.x - self.step
+            self.check_overlap()
+            if self.overlap:
+                self.dx += 0
+            else:
+                self.dx -= self.step
 
         elif self.input_manager.down_pressed:
-            self.dy += 8
+            self.box_collider.y = self.y + self.step
+            self.check_overlap()
+            if self.overlap:
+                self.dy += 0
+            else:
+                self.dy += self.step
 
         elif self.input_manager.up_pressed:
-            self.dy -= 8
+            self.box_collider.y = self.y - self.step
+            self.check_overlap()
+            if self.overlap:
+                self.dy += 0
+            else:
+                self.dy -= self.step
 
         self.x += self.dx
         self.y += self.dy
+        self.box_collider.x = self.x
+        self.box_collider.y = self.y
+        self.overlap = False
+
+    # def check_collision(self):
+    #
+    #     collide_list = collide_with(self.box_collider, Wall)
+    #     for game_object in collide_list:
+    #         if self.x + self.dx + 32 == game_object.x:
+    #             self.input_manager.right_pressed = False
+    #         elif self.x + self.dx - 32 == game_object.x:
+    #             self.input_manager.left_pressed = False
+    #         elif self.y + self.dy + 32 == game_object.y:
+    #             self.input_manager.down_pressed = False
+    #         elif self.y + self.dy - 32 == game_object.y:
+    #             self.input_manager.up_pressed = False
+        # if len(collide_list) > 0:
+        #     self.dx = 0
+        #     self.dy = 0
+        # last_direct = ()
+        # collide_list = collide_with(self.box_collider, Wall)
+        # if self.dx < 0:
+
+
 
 
 
